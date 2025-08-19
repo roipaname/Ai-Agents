@@ -13,7 +13,7 @@ def load_pdf(path:str)->str:
 def load_docx(path:str)->str:
     elements = partition_docx(filename=path)
     return "\n".join(e.text for e in elements if getattr(e, "text", None))
-def load_only(path:str)->str:
+def load_any(path:str)->str:
     ext=Path(path).suffix.lower()
     if ext ==".txt":
         return load_txt(path)
@@ -21,3 +21,12 @@ def load_only(path:str)->str:
         return load_pdf(path)
     elif ext==".docx":
         return load_docx(path)
+    raise ValueError(f"Unsupported file type: {ext}")
+
+def collect_files(root: str) -> List[str]:
+    paths = []
+    for dirpath, _, files in os.walk(root):
+        for f in files:
+            if Path(f).suffix.lower() in [".txt", ".pdf", ".docx"]:
+                paths.append(os.path.join(dirpath, f))
+    return sorted(paths)

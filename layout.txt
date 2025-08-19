@@ -1,0 +1,19 @@
+ai-agent/
+├── requirements.txt
+├── .env.example
+├── data/
+│   └── lectures/            # put your .txt/.pdf/.docx here
+├── models/
+│   └── lora-lecture-gpt2/   # fine-tuned adapter will be saved here
+├── storage/
+│   └── faiss/               # vector DB files
+├── scripts/
+│   ├── prepare_data.py
+│   ├── finetune.py
+│   ├── build_vector_db.py
+│   ├── ingest_new.py
+│   ├── agent.py
+│   └── api.py
+└── utils/
+    ├── loaders.py
+    └── web_tools.py

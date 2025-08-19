@@ -65,7 +65,7 @@ Training arguments set up
 
 args = TrainingArguments(
     output_dir=OUT_DIR,
-    num_train_epochs=2,
+    num_train_epochs=8,
     per_device_train_batch_size=2,
     gradient_accumulation_steps=8,
     learning_rate=2e-4,

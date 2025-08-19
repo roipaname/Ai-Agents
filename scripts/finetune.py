@@ -15,3 +15,13 @@ OUT_DIR = "models/lora-lecture-gpt2"
 """
 Loading tokenizer and setting eos for tokenizer
 """
+tokenizer=AutoTokenizer.from_pretrained(BASE_MODEL)
+if tokenizer.pad_token is None:
+    tokenizer.pad_token=tokenizer.eos_token
+model=AutoModelForCausalLM.from_pretrained(BASE_MODEL,device_map="auto")
+
+lora_cfg=LoraConfig(
+    r=16, lora_alpha=32, lora_dropout=0.05,
+    bias="none", task_type="CAUSAL_LM",
+    target_modules=["c_attn","c_proj"]
+)

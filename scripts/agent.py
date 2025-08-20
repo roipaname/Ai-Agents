@@ -12,7 +12,7 @@ load_dotenv()
 BASE_MODEL = os.getenv("BASE_MODEL", "gpt2")
 EMBED_MODEL = os.getenv("EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 DB_DIR = "storage/faiss"
-LORA_DIR = "models/lora-lecture-gpt2"
+LORA_DIR = "models/lora-lecture-gpt2/checkpoint-16"
 
 # Load generator (base + LoRA if present)
 tokenizer = AutoTokenizer.from_pretrained(LORA_DIR if os.path.exists(LORA_DIR) else BASE_MODEL)

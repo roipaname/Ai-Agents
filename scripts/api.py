@@ -2,8 +2,8 @@ import os
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from scripts.agent import answer, db, embedder
-from utils.loaders import load_any
+from scripts.agent import answer, db, embeddings
+from utils.loader import load_any
 from langchain_community.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
@@ -29,7 +29,7 @@ async def add(file: UploadFile = File(...)):
     # if it's not text, try loader route (e.g., pdf bytes) — for brevity assume text here
     splitter = RecursiveCharacterTextSplitter(chunk_size=900, chunk_overlap=150)
     chunks = splitter.split_text(content)
-    vectors = embedder.encode(chunks, normalize_embeddings=True)
+    vectors = embeddings.encode(chunks, normalize_embeddings=True)
     FAISS_store = db  # reuse loaded DB from scripts.agent import
     FAISS_store.add_embeddings(embeddings=vectors, metadatas=[{"path": file.filename}] * len(chunks), documents=chunks)
     FAISS_store.save_local("storage/faiss")

@@ -2,7 +2,7 @@
 import streamlit as st
 import requests
 
-API_URL = "http://localhost:8000"  # FastAPI backend
+API_URL = "http://localhost:8001"  # FastAPI backend
 
 st.set_page_config(
     page_title="Ziyanda's Personal AI Agent",
@@ -296,7 +296,7 @@ with tab2:
                     try:
                         files = {"file": (uploaded_file.name, uploaded_file.read())}
                         resp = requests.post(f"{API_URL}/add", files=files)
-                        chunks_added = resp.json().get('chunks_added', 0)
+                        chunks_added = resp.json().get('file', 0)
                         st.success(f"✅ Successfully processed! Added {chunks_added} knowledge chunks to your database.")
                     except Exception as e:
                         st.error(f"⚠️ Upload failed: {e}")

@@ -8,7 +8,7 @@ def load_txt(path: str) -> str:
     with open(path, "r", encoding="utf-8", errors="ignore") as f:
         return f.read()
 def load_pdf(path:str)->str:
-    elements=partition_pdf(filname=path)
+    elements=partition_pdf(filename=path)
     return "\n".join(e.text for e in elements if getattr(e, "text", None))
 def load_docx(path:str)->str:
     elements = partition_docx(filename=path)

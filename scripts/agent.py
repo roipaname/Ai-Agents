@@ -3,7 +3,7 @@ import os
 from typing import List, Tuple
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from utils.web_tools import ddg_search, fetch_readable
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch

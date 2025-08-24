@@ -6,6 +6,7 @@ from scripts.agent import answer, db, embeddings
 from utils.loader import load_any
 from langchain_community.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from scripts.ingest_new import ingest
 
 load_dotenv()
 PORT = int(os.getenv("PORT", "8000"))
@@ -25,14 +26,16 @@ async def ask(q: str = Form(...), use_web: bool = Form(True)):
 
 @app.post("/add")
 async def add(file: UploadFile = File(...)):
-    content = (await file.read()).decode(errors="ignore")
-    # if it's not text, try loader route (e.g., pdf bytes) — for brevity assume text here
-    splitter = RecursiveCharacterTextSplitter(chunk_size=900, chunk_overlap=150)
-    chunks = splitter.split_text(content)
-    vectors = embeddings.encode(chunks, normalize_embeddings=True)
-    FAISS_store = db  # reuse loaded DB from scripts.agent import
-    FAISS_store.add_embeddings(embeddings=vectors, metadatas=[{"path": file.filename}] * len(chunks), documents=chunks)
-    FAISS_store.save_local("storage/faiss")
-    return {"status":"ok", "chunks_added": len(chunks)}
+    # Save uploaded file temporarily so ingest() can process it
+    temp_path = os.path.join("uploads", file.filename)
+    os.makedirs("uploads", exist_ok=True)
+
+    with open(temp_path, "wb") as f:
+        f.write(await file.read())
+
+    # Call the existing ingest() function
+    ingest(temp_path)
+
+    return {"status": "ok", "file": file.filename}
 
 # Run: uvicorn scripts.api:app --reload --port 8000
